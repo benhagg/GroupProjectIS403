@@ -16,8 +16,8 @@
 ### Step 3: Pulling Updates from GitHub
 To keep your local copy up-to-date with changes others make:
 1. In the terminal, use:
-   - `git pull origin main`
-   - **Note**: `main` is the name of the main branch. If we use a different branch, replace `main` with that branch name.
+   - `git pull origin master`
+   - **Note**: `master` is the name of the master branch. If we use a different branch, replace `master` with that branch name.
 
 ### Step 4: Making Changes and Pushing to GitHub
 When you make changes, follow these steps to send them to GitHub:
@@ -32,7 +32,7 @@ When you make changes, follow these steps to send them to GitHub:
 
 3. **Push Your Changes to GitHub**:
    - Send your commits to the repository on GitHub by typing:
-     - `git push origin main`
+     - `git push origin master`
 
 ### Step 5: Pull Before Making New Changes
-- Before making new changes each day, run `git pull origin main` to make sure you’re working with the latest version from GitHub. This helps prevent conflicts.
+- Before making new changes each day, run `git pull origin master` to make sure you’re working with the latest version from GitHub. This helps prevent conflicts.
