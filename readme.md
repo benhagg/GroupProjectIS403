@@ -36,7 +36,7 @@ Got some delicious code to add? Here’s how to send your creations back to the 
 
 1. **Stage Your Ingredients**:
 
-- In the terminal, type: git add .
+- In the terminal, type: ```git add .```
 
 - This gets everything you’ve prepared ready for baking.
 
