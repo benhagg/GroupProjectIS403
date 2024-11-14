@@ -25,13 +25,13 @@ app.use(express.static("public"));
 // })
 
 app.get("/login", (req, res) => {
-  res.render("pages/login"); // This will probably need to change to index if we want honestly. Or we can move the login page as a redirect
+    res.render("pages/login"); // This will probably need to change to index if we want honestly. Or we can move the login page as a redirect
 });
 // the routes are imported as pagesRouter and defined in /routes/pageRoutes.js
 // example: if we get a request to /home, the pagesRouter will handle it and render the home page
 app.use("/", pagesRouter);
 
 app.listen(port, () => {
-  console.log("Listening on port " + port);
-  console.log(`Click here to open: http://localhost:${port}`);
+    console.log("Listening on port " + port);
+    console.log(`Click here to open: http://localhost:${port}`);
 });

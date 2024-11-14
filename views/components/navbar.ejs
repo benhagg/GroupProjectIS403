@@ -1,4 +1,43 @@
 <link rel="stylesheet" href="../../public/css/navbar.css">
+
+<style>
+    nav {
+        background-color: white;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+        color: black;
+        text-align: center;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        margin: 0;
+        padding: 10px;
+        z-index: 1000;
+    }
+
+    body {
+        margin-top: 50px;
+        /* Adjust this value based on the height of your navbar */
+    }
+
+    nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    nav ul li {
+        display: inline;
+        margin-right: 20px;
+    }
+
+    nav ul li a {
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
+    }
+</style>
+
 <nav>
     <ul>
         <li><a href="/home">Home</a></li>
