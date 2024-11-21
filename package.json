@@ -4,7 +4,8 @@
     "description": "### Step 1: Clone the Repository 1. Open VS Code and go to **View > Terminal** to open the integrated terminal. 2. In the terminal, navigate to the folder where you want to store the project. 3. Clone the Repository by running the following command (this creates a copy of the repo on your computer):    - `git clone https://github.com/benhagg/GroupProjectIS403.git` 4. Once cloning is complete, open the project in VS Code:    - Go to **File > Open Folder...** and select the `GroupProjectIS403` folder.",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node index.js"
     },
     "author": "",
     "license": "ISC",

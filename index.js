@@ -4,7 +4,7 @@ let path = require("path");
 let session = require('express-session');
 // Import the pages get routes from pageRoutes.js (for navigation between pages)
 let pagesRouter = require("./routes/pageRoutes");
-const port = 5001;
+const port = process.env.PORT || 3000;
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
