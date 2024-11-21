@@ -37,6 +37,7 @@
 
 <body>
     <form id="loginForm" action="/login" method="post">
+        <input type="hidden" id="originalUrl" name="originalUrl" value="<%= originalUrl || '/' %>">
         <label>Welcome to Dane's Bakery</label>
         <br><br>
         <label for="username">Username:</label>
@@ -48,6 +49,8 @@
         <input type="password" id="password" name="password" required>
         <br><br>
         <button type="submit">Login</button>
+        <br><br>
+        <a href="/" class="button">Home</a>
     </form>
 
 </body>
