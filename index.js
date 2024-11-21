@@ -28,11 +28,11 @@ app.use((req, res, next) => {
 const knex = require("knex")({
     client: "pg",
     connection: {
-        host: "localhost",
-        user: "postgres",
-        password: "admin",
-        database: "bakery",
-        port: 5433
+        host: process.env.RDS_HOST || "localhost",
+        user: process.env.RDS_USERNAME || "postgres",
+        password: process.env.RDS_PASSWORD || "admin",
+        database: process.env.RDS_PORT || "bakery",
+        port: process.env.RDS_PORT || 5433
     }
 })
 
