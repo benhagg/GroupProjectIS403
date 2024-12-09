@@ -36,7 +36,8 @@ router.get("/", (req, res) => {
 router.get("/account", checkAuthenticated, (req, res) => {
     knex("users")
     .select()
-    .where(username, req.session.user.username)
+    .where('username', req.session.user.username)
+    .first()
     .then((user) =>{
         // Render the layout with home page content in the body
         res.render("layout", {
@@ -104,7 +105,7 @@ router.post("/login", async (req, res) => {
         .then((user) => {
             req.session.authenticated = true;
             req.session.user = {
-                email: user.email,
+                username: user.username,
             };
             res.redirect("/");
         })
