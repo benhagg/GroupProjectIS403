@@ -38,22 +38,6 @@ router.get("/", (req, res) => {
         })
 });
 
-router.get("/account", checkAuthenticated, (req, res) => {
-    knex("users")
-        .select()
-        .where('username', req.session.user.username)
-        .first()
-        .then((user) => {
-            // Render the layout with home page content in the body
-            res.render("layout", {
-                title: "Account",
-                page: "account", // Dynamically include the account page
-                user: user
-            });
-        })
-
-});
-
 router.get("/contact", (req, res) => {
     // Render the layout with contact page content in the body
     res.render("layout", {
@@ -74,7 +58,6 @@ router.post("/contact", (req, res) => {
             email: email || '',
             message: message || '',
         })
-
 });
 
 router.get("/shop", (req, res) => {
@@ -169,9 +152,6 @@ router.post("/updateOrderStatus", (req, res) => {
     knex("orders")
         .where({ order_id: orderId })
         .update({ status: status })
-        .then(() => {
-            res.redirect("/orders");
-        })
         .catch((error) => {
             console.error(`\x1b[31m${error}\x1b[0m`);
             res.status(500).json({ success: false, message: "Error updating order status" });
