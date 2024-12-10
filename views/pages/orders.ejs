@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <link rel="stylesheet" href="/path/to/your/styles.css">
+</head>
+
+<style>
+    .orders-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding-bottom: 50px;
+    }
+
+    .order-card {
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 10px;
+        margin: 10px;
+        width: 30%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .order-card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+    }
+
+    .order-items {
+        margin-top: 10px;
+    }
+
+    .allOrdersContainer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .singleOrderContainer {
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 10px;
+        margin: 10px;
+        width: 100%;
+    }
+
+    .productImage {
+        width: 100px;
+        max-height: 100px;
+        object-fit: scale-down;
+        border-radius: 10px;
+    }
+</style>
+
+<body>
+    <h1>Orders</h1>
+    <div class="orders-container">
+        <% orders.forEach(order=> { %>
+            <div class="order-card">
+                <h2>Order ID: <%= order.order_id %>
+                </h2>
+                <p>Order Date: <%= new Date(order.order_date).toLocaleDateString() %>
+                </p>
+                <p>Customer Username: <%= order.username %>
+                </p>
+                <div class="order-items">
+                    <h3>Items:</h3>
+                    <div class="allOrdersContainer">
+                        <% order.products.forEach(product=> { %>
+                            <div class="singleOrderContainer">
+                                <img class="productImage" src="<%= product.image_url %>" alt="<%= product.name %>">
+                                <h4>
+                                    <%= product.name %>
+                                </h4>
+                                <p>Description: <%= product.description %>
+                                </p>
+                                <p>Quantity: <%= product.quantity %>
+                                </p>
+                                <p>Modifications: <%= product.modifications ? product.modifications : "None" %>
+                                </p>
+                                <p>Price: $<%= product.price %>
+                                </p>
+                            </div>
+                            <% }) %>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: row; gap: 10px;">
+                    <div class="order-status">
+                        <input type="checkbox" id="order-<%= order.order_id %>"
+                            onchange="updateOrderStatus(<%= order.order_id %>, true)">
+                        <label for="order-<%= order.order_id %>">Complete</label>
+                    </div>
+                    <div class="order-status">
+                        <input type="checkbox" id="delete-order-<%= order.order_id %>"
+                            onchange="updateOrderStatus(<%= order.order_id %>, false)">
+                        <label for="delete-order-<%= order.order_id %>">Delete</label>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
+    </div>
+
+    <script>
+        function toggleOrderStatus(orderId) {
+            const checkbox = document.getElementById(`order-${orderId}`);
+            checkbox.checked = !checkbox.checked;
+            updateOrderStatus(orderId, checkbox.checked);
+        }
+
+        function updateOrderStatus(orderId, status) {
+            fetch('/updateOrderStatus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ orderId: orderId, status: status })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>
