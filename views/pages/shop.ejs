@@ -1,43 +1,77 @@
-<h1>Shop Page</h1>
+<style>
+    .shop-items {
+        display: flex;
+        flex-wrap: wrap; /* Allows items to wrap to the next line */
+        gap: 16px; /* Adds space between items */
+    }
+    .modal {
+        display: none; /* Hide the modal initially */
+    }
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+        z-index: 1000; /* Ensure it appears above most content */
+        opacity: 0;
+        transition: opacity 0.3s ease; /* Smooth fade-in effect */
+    }
+
+    .modal-overlay.show {
+        opacity: 1; /* Makes the overlay visible */
+    }
+</style>
 <div class="shop-items">
-    <div class="item">
-        <img src="/images/bread1.jpg" alt="Bread 1" />
-        <p>Bread 1 - $5.00</p>
-        <form action="/add-to-cart" method="POST">
-            <input type="hidden" name="username" value="current_user"> <!-- Pass the current logged-in user -->
-            <input type="hidden" name="productId" value="1"> <!-- Pass the product ID -->
-            <input type="number" name="quantity" value="1" min="1" /> <!-- Quantity -->
-            <button type="submit">Add to Cart</button>
-        </form>
+    <% for (let item of products) { 
+        console.log(item)
+        %>
+        
+        <%- include("../components/shopItem", { item: item }) %>
+        <br>
+    <% } %>
+</div>
+<!-- Modal Structure -->
+<div id="quantityModal" class="modal">
+    <div class="modal-content">
+        <h4>Enter Quantity</h4>
+        <input type="number" id="quantityInput" min="1" value="1">
+        <p>Total Price: $<span id="totalPrice">0.00</span></p>
     </div>
-    <div class="item">
-        <img src="/images/bread2.jpg" alt="Bread 2" />
-        <p>Bread 2 - $6.00</p>
-        <form action="/add-to-cart" method="POST">
-            <input type="hidden" name="username" value="current_user"> <!-- Pass the current logged-in user -->
-            <input type="hidden" name="productId" value="2"> <!-- Pass the product ID -->
-            <input type="number" name="quantity" value="1" min="1" /> <!-- Quantity -->
-            <button type="submit">Add to Cart</button>
-          </form>
-    </div>
-    <div class="item">
-        <img src="/images/bakery1.jpg" alt="Bakery 1" />
-        <p>Bakery Item 1 - $4.00</p>
-        <form action="/add-to-cart" method="POST">
-            <input type="hidden" name="username" value="current_user"> <!-- Pass the current logged-in user -->
-            <input type="hidden" name="productId" value="3"> <!-- Pass the product ID -->
-            <input type="number" name="quantity" value="1" min="1" /> <!-- Quantity -->
-            <button type="submit">Add to Cart</button>
-          </form>
-    </div>
-    <div class="item">
-        <img src="/images/bakery2.jpg" alt="Bakery 2" />
-        <p>Bakery Item 2 - $7.00</p>
-        <form action="/add-to-cart" method="POST">
-            <input type="hidden" name="username" value="current_user"> <!-- Pass the current logged-in user -->
-            <input type="hidden" name="productId" value="4"> <!-- Pass the product ID -->
-            <input type="number" name="quantity" value="1" min="1" /> <!-- Quantity -->
-            <button type="submit">Add to Cart</button>
-          </form>
+    <div class="modal-footer">
+        <button id="addToCartBtn" class="modal-close btn">Add to Cart</button>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.modal');
+        var instances = M.Modal.init(elems);
+    });
+
+    document.querySelectorAll('.card-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const itemPrice = parseFloat(this.dataset.price);
+            const modal = document.querySelector('#quantityModal');
+            const quantityInput = modal.querySelector('#quantityInput');
+            const totalPrice = modal.querySelector('#totalPrice');
+
+            quantityInput.value = 1;
+            totalPrice.textContent = itemPrice.toFixed(2);
+
+            quantityInput.addEventListener('input', function() {
+                const quantity = parseInt(this.value);
+                totalPrice.textContent = (itemPrice * quantity).toFixed(2);
+            });
+
+            const instance = M.Modal.getInstance(modal);
+            instance.open();
+        });
+    });
+
+    document.querySelector('#addToCartBtn').addEventListener('click', function() {
+        const quantity = parseInt(document.querySelector('#quantityInput').value);
+        // Add to cart logic here
+    });
+</script>

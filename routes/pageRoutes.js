@@ -82,6 +82,7 @@ router.get("/shop", (req, res) => {
         .select()
         .then((products) => {
             // Render the layout with home page content in the body
+            console.log(products);
             res.render("layout", {
                 title: "Shop",
                 page: "shop", // Dynamically include the shop page
