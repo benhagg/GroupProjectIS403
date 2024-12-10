@@ -158,4 +158,12 @@ router.post("/updateOrderStatus", (req, res) => {
         });
 });
 
+// this route is for test and debugging. if we dont figure out how to do the cart this could be used
+// to create an order for every item submitted.
+router.post("/createOrder", (req, res) => {
+    console.log(req.body);
+    console.log("order created")
+    res.redirect("/shop");
+})
+
 module.exports = router;
