@@ -1,136 +1,143 @@
 <style>
     .shop-items {
         display: flex;
-        flex-wrap: wrap; /* Allows items to wrap to the next line */
-        gap: 16px; /* Adds space between items */
+        flex-wrap: wrap;
+        /* Allows items to wrap to the next line */
+        gap: 16px;
+        /* Adds space between items */
         padding: 20px;
     }
 
-/* Modal Styling */
-.modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    max-width: 400px;
-    width: 90%;
-    display: none;
-    z-index: 1001;
-}
-
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    z-index: 1000; /* Ensure it appears below modal */
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-/* Show modal and overlay */
-.modal.show {
-    display: block;
-}
-
-.modal-overlay.show {
-    opacity: 1;
-}
-
-/* Close button styling */
-.modal-close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 30px;
-    color: #333;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.modal-close-btn:hover {
-    color: crimson; /* Change color on hover */
-}
-
-/* Modal Content */
-.modal-content {
-    text-align: center;
-}
-
-h4 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.quantity-input {
-    width: 60px;
-    padding: 8px;
-    font-size: 1rem;
-    margin: 10px 0;
-    border: 2px solid #ddd;
-    border-radius: 4px;
-    text-align: center;
-}
-
-.quantity-input:focus {
-    border-color: #3498db;
-    outline: none;
-}
-
-/* Total Price Styling */
-#totalPrice {
-    font-weight: bold;
-    font-size: 1.2rem;
-    color: #27ae60;
-}
-
-.btn {
-    padding: 10px 20px;
-    font-size: 1rem;
-    color: #fff;
-    background-color: #333; /* Dark gray background */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-    background-color: #555; /* Darker gray on hover */
-}
-
-.modal-footer {
-    justify-content: center;
-}
-
-.modal-footer button {
-    width: 100%;
-}
-
-@media (min-width: 600px) {
-    .modal-footer button {
-        width: auto;
+    /* Modal Styling */
+    .modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        width: 90%;
+        display: none;
+        z-index: 1001;
     }
-}
 
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Semi-transparent background */
+        z-index: 1000;
+        /* Ensure it appears below modal */
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    /* Show modal and overlay */
+    .modal.show {
+        display: block;
+    }
+
+    .modal-overlay.show {
+        opacity: 1;
+    }
+
+    /* Close button styling */
+    .modal-close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 30px;
+        color: #333;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .modal-close-btn:hover {
+        color: crimson;
+        /* Change color on hover */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        text-align: center;
+    }
+
+    h4 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .quantity-input {
+        width: 60px;
+        padding: 8px;
+        font-size: 1rem;
+        margin: 10px 0;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+        text-align: center;
+    }
+
+    .quantity-input:focus {
+        border-color: #3498db;
+        outline: none;
+    }
+
+    /* Total Price Styling */
+    #totalPrice {
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #27ae60;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 1rem;
+        color: #fff;
+        background-color: #333;
+        /* Dark gray background */
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #555;
+        /* Darker gray on hover */
+    }
+
+    .modal-footer {
+        justify-content: center;
+    }
+
+    .modal-footer button {
+        width: 100%;
+    }
+
+    @media (min-width: 600px) {
+        .modal-footer button {
+            width: auto;
+        }
+    }
 </style>
+
 <div class="shop-items">
     <% for (let item of products) {%>
         <%- include("../components/shopItem", { item: item }) %>
-        <br>
-    <% } %>
+            <br>
+            <% } %>
 </div>
 
 <!-- Modal Structure -->
 <div id="quantityModal" class="modal">
-    <span class="modal-close-btn">&times;</span> <!-- Close button with '×' symbol -->
+    <span onclick="closeModal()" class="modal-close-btn">&times;</span> <!-- Close button with '×' symbol -->
     <div class="modal-content">
         <h4>Enter Quantity</h4>
         <form id="addToCartForm" action="/createOrder" method="POST">
@@ -142,70 +149,70 @@ h4 {
             <input type="hidden" name="itemId" id="itemIdInput">
             <button type="submit" id="addToCartBtn" class="btn">Add to Cart</button>
         </form>
-        
-</div>
 
-<script>
-    // Close modal function
-    function closeModal() {
-        const modal = document.querySelector('#quantityModal');
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
+    </div>
 
-    // Initialize or retrieve the cart from localStorage
-    function getCart() {
-        const cart = localStorage.getItem('cart');
-        return cart ? JSON.parse(cart) : [];
-    }
+    <script>
+        // Close modal function
+        function closeModal() {
+            const modal = document.querySelector('#quantityModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
 
-    // Save the cart to localStorage
-    function saveCart(cart) {
-        localStorage.setItem('cart', JSON.stringify(cart));
-    }
+        // Initialize or retrieve the cart from localStorage
+        function getCart() {
+            const cart = localStorage.getItem('cart');
+            return cart ? JSON.parse(cart) : [];
+        }
 
-    // Each button is given an event listener
-    document.querySelectorAll('.card-button').forEach(button => {
-    button.addEventListener('click', function() {
-        const itemName = this.dataset.name;
-        const itemPrice = parseFloat(this.dataset.price);
-        const itemId = this.dataset.itemid;
-        const modal = document.querySelector('#quantityModal');
-        const quantityInput = modal.querySelector('#quantityInput');
-        const totalPrice = modal.querySelector('#totalPrice');
+        // Save the cart to localStorage
+        function saveCart(cart) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
 
-        quantityInput.value = 1; // Default quantity
-        totalPrice.textContent = itemPrice.toFixed(2); // Default total price based on quantity
+        // Each button is given an event listener
+        document.querySelectorAll('.card-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const itemName = this.dataset.name;
+                const itemPrice = parseFloat(this.dataset.price);
+                const itemId = this.dataset.itemid;
+                const modal = document.querySelector('#quantityModal');
+                const quantityInput = modal.querySelector('#quantityInput');
+                const totalPrice = modal.querySelector('#totalPrice');
 
-        quantityInput.addEventListener('input', function() {
-            const quantity = parseInt(this.value);
-            totalPrice.textContent = (itemPrice * quantity).toFixed(2);
-        });
+                quantityInput.value = 1; // Default quantity
+                totalPrice.textContent = itemPrice.toFixed(2); // Default total price based on quantity
 
-        document.querySelector('#addToCartBtn').addEventListener('click', function(event) {
-            event.preventDefault();
-            const quantity = parseInt(quantityInput.value);
-            const cart = getCart();
-            const existingItem = cart.find(item => item.id === itemId);
-
-            if (existingItem) {
-                existingItem.quantity += quantity;
-            } else {
-                cart.push({
-                    id: itemId,
-                    name: itemName,
-                    price: itemPrice,
-                    quantity: quantity
+                quantityInput.addEventListener('input', function () {
+                    const quantity = parseInt(this.value);
+                    totalPrice.textContent = (itemPrice * quantity).toFixed(2);
                 });
-            }
 
-            saveCart(cart);
-            closeModal();
+                document.querySelector('#addToCartBtn').addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const quantity = parseInt(quantityInput.value);
+                    const cart = getCart();
+                    const existingItem = cart.find(item => item.id === itemId);
+
+                    if (existingItem) {
+                        existingItem.quantity += quantity;
+                    } else {
+                        cart.push({
+                            id: itemId,
+                            name: itemName,
+                            price: itemPrice,
+                            quantity: quantity
+                        });
+                    }
+
+                    saveCart(cart);
+                    closeModal();
+                });
+
+                modal.style.display = 'block';
+            });
         });
 
-        modal.style.display = 'block';
-    });
-});
 
-
-</script>
+    </script>
