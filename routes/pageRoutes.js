@@ -6,9 +6,9 @@ const knex = require("knex")({
     connection: {
         host: process.env.RDS_HOSTNAME || "localhost",
         user: process.env.RDS_USERNAME || "postgres",
-        password: process.env.RDS_PASSWORD || "admin",
+        password: process.env.RDS_PASSWORD || "Smores7531",
         database: process.env.RDS_DB_NAME || "bakery",
-        port: process.env.RDS_PORT || 5433,
+        port: process.env.RDS_PORT || 5434,
     },
 });
 
@@ -172,9 +172,6 @@ router.get("/cart", (req, res) => {
     });
 });
 
-
-
-
 router.post('/checkout', async (req, res) => {
     if (!req.session.username) {
         return res.status(401).send({ status: 'error', message: 'User not logged in' });
@@ -207,9 +204,5 @@ router.post('/checkout', async (req, res) => {
         res.status(500).send({ status: 'error', message: 'Error processing order' });
     }
 });
-
-
-
-
 
 module.exports = router;
