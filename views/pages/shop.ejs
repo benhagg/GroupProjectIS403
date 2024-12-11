@@ -149,79 +149,13 @@
                 <input type="number" id="quantityInput" name="quantity" min="1" value="1" class="quantity-input">
                 <p>Total Price: $<span id="totalPrice">0.00</span></p>
             </div>
+            <div>
+                ino
+            </div>
             <br>
             <input type="hidden" name="itemId" id="itemIdInput">
             <button type="submit" id="addToCartBtn" class="btn">Add to Cart</button>
         </form>
-<<<<<<< HEAD
-
-        <!-- Somewhere inside or outside the 'shop-items' div, based on your layout preference -->
-
-        
-</div>
-
-
-<script>
-    function closeModal() {
-        const modal = document.querySelector('#quantityModal');
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
-    
-    function getCart() {
-        const cart = localStorage.getItem('cart');
-        return cart ? JSON.parse(cart) : [];
-    }
-    
-    function saveCart(cart) {
-        localStorage.setItem('cart', JSON.stringify(cart));
-    }
-    
-    document.querySelectorAll('.card-button').forEach(button => {
-        button.addEventListener('click', function() {
-            const modal = document.querySelector('#quantityModal');
-            modal.style.display = 'block';
-    
-            const itemName = this.dataset.name;
-            const itemPrice = parseFloat(this.dataset.price);
-            const itemId = this.dataset.itemid;
-            const quantityInput = modal.querySelector('#quantityInput');
-            const totalPrice = modal.querySelector('#totalPrice');
-    
-            quantityInput.value = 1;
-            totalPrice.textContent = itemPrice.toFixed(2);
-    
-            quantityInput.addEventListener('input', function() {
-                const quantity = parseInt(this.value);
-                totalPrice.textContent = (itemPrice * quantity).toFixed(2);
-            });
-    
-            document.querySelector('#addToCartBtn').addEventListener('click', function(event) {
-                event.preventDefault();
-                const quantity = parseInt(quantityInput.value);
-                const cart = getCart();
-                const existingItem = cart.find(item => item.id === itemId);
-    
-                if (existingItem) {
-                    existingItem.quantity += quantity;
-                } else {
-                    cart.push({
-                        id: itemId,
-                        name: itemName,
-                        price: itemPrice,
-                        quantity: quantity
-                    });
-                }
-    
-                saveCart(cart);
-                closeModal();
-                document.getElementById('goToCartBtn').style.display = 'block';  // Ensure this is the only place it turns display to block
-            });
-        });
-    });
-    </script>
-    
-=======
 
     </div>
 
@@ -289,4 +223,3 @@
 
 
     </script>
->>>>>>> add34a1423bae654c587053ea86ccc2ec87f73d8
