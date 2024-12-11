@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            background: #f4f4f4;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .cart-container {
+            background: white;
+            width: 60%;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: burlywood;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: bisque;
+        }
+        .checkout-btn {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .total-display {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="cart-container">
+        <h1>Your Shopping Cart</h1>
+        <div id="cartItems"></div>
+        <div class="total-display"></div>
+        
+        <button id="checkout-btn" class="checkout-btn">Checkout</button>
+        
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartItemsContainer = document.getElementById('cartItems');
+            const totalDisplay = document.querySelector('.total-display');
+
+            function getProductDetails(itemId) {
+                const products = {
+                    '1': { name: 'Sourdough Bread', price: 5.99 },
+                    '2': { name: 'Brownie', price: 2.49 },
+                    '3': { name: 'Croissant', price: 3.47 },
+                    '4': { name: 'Bagel', price: 1.99 },
+                    '5': { name: 'Pumpkin Pie', price: 12.99 },
+                    '6': { name: 'Donut', price: 2.99 },
+                    '7': { name: 'Baguette', price: 3.49 },
+                    '8': { name: 'Scone', price: 4.99 }
+                };
+                return products[itemId];
+            }
+
+            function updateCartDisplay() {
+                if (cart.length === 0) {
+                    cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+                    totalDisplay.textContent = '';
+                } else {
+                    let total = 0;
+                    cartItemsContainer.innerHTML = cart.map((item, index) => {
+                        const product = getProductDetails(item.id);
+                        const subtotal = product.price * item.quantity;
+                        total += subtotal;
+                        return `
+                            <div class="cart-item">
+                                <div>
+                                    <h4>${product.name}</h4>
+                                    <p>Price: $${product.price.toFixed(2)}</p>
+                                    <p>Quantity: ${item.quantity}</p>
+                                    <p>Subtotal: $${subtotal.toFixed(2)}</p>
+                                </div>
+                                <button onclick="removeItem(${index})">Delete</button>
+                            </div>
+                        `;
+                    }).join('');
+                    totalDisplay.textContent = `Total: $${total.toFixed(2)}`;
+                }
+            }
+
+            window.removeItem = function(index) {
+                cart.splice(index, 1);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartDisplay();
+            };
+
+            updateCartDisplay();
+        });
+
+          // Example using Fetch API
+        
+          document.getElementById('checkout-btn').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const username = sessionStorage.getItem('username');
+    
+    fetch('/checkout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username: username,
+            cartItems: cartItems
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            console.log('Order processed successfully');
+            localStorage.removeItem('cart');
+            window.location.href = '/order-success'; // Redirect to a success page
+        } else {
+            console.error('Order processing failed:', data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+</script>
+
+</body>
+</html>

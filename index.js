@@ -13,6 +13,8 @@ app.use(express.urlencoded({ extended: true }));
 // For example you can link to a css file like this no matter what page you are on: <link rel="stylesheet" href="/styles.css">
 app.use(express.static("public"));
 
+
+
 app.use(session({
     secret: 'abc123',
     resave: false,
@@ -63,6 +65,8 @@ app.post('/login', async (req, res) => {
         res.status(500).send('Database query failed: ' + error.message);
     }
 });
+
+
 
 app.listen(port, () => {
     console.log("Listening on port " + port);

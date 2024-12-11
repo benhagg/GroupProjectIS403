@@ -146,39 +146,66 @@ h4 {
 </div>
 
 <script>
-    document.querySelector('.modal-close-btn').addEventListener('click', function() {
-        document.querySelector('#quantityModal').style.display = 'none';
+    // Close modal function
+    function closeModal() {
+        const modal = document.querySelector('#quantityModal');
+        modal.style.display = 'none';
         document.body.style.overflow = 'auto';
-    });
-</script>
+    }
 
-<script>
-    // each button is given an event listener
+    // Initialize or retrieve the cart from localStorage
+    function getCart() {
+        const cart = localStorage.getItem('cart');
+        return cart ? JSON.parse(cart) : [];
+    }
+
+    // Save the cart to localStorage
+    function saveCart(cart) {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    // Each button is given an event listener
     document.querySelectorAll('.card-button').forEach(button => {
-        button.addEventListener('click', function() {
-            // get the price from the data-price attribute on the .card_button element
-            const itemPrice = parseFloat(this.dataset.price);
-            const modal = document.querySelector('#quantityModal');
-            const quantityInput = modal.querySelector('#quantityInput');
-            itemIdInput = modal.querySelector('#itemIdInput');
-            const totalPrice = modal.querySelector('#totalPrice');
-            // set the quantity to 1 by default
-            quantityInput.value = 1;
-            // get the itemid from the data-itemid attribute on the .card_button element
-            itemIdInput.value = this.dataset.itemid;
-            totalPrice.textContent = itemPrice.toFixed(2);
+    button.addEventListener('click', function() {
+        const itemName = this.dataset.name;
+        const itemPrice = parseFloat(this.dataset.price);
+        const itemId = this.dataset.itemid;
+        const modal = document.querySelector('#quantityModal');
+        const quantityInput = modal.querySelector('#quantityInput');
+        const totalPrice = modal.querySelector('#totalPrice');
 
-            // dynamically update the price based on the quantity
-            quantityInput.addEventListener('input', function() {
-                const quantity = parseInt(this.value);
-                totalPrice.textContent = (itemPrice * quantity).toFixed(2);
-            });
-            modal.style.display = 'block';
+        quantityInput.value = 1; // Default quantity
+        totalPrice.textContent = itemPrice.toFixed(2); // Default total price based on quantity
+
+        quantityInput.addEventListener('input', function() {
+            const quantity = parseInt(this.value);
+            totalPrice.textContent = (itemPrice * quantity).toFixed(2);
         });
-    });
 
-    document.querySelector('#addToCartBtn').addEventListener('click', function() {
-        const quantity = parseInt(document.querySelector('#quantityInput').value);
-        // Add to cart logic here
+        document.querySelector('#addToCartBtn').addEventListener('click', function(event) {
+            event.preventDefault();
+            const quantity = parseInt(quantityInput.value);
+            const cart = getCart();
+            const existingItem = cart.find(item => item.id === itemId);
+
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    id: itemId,
+                    name: itemName,
+                    price: itemPrice,
+                    quantity: quantity
+                });
+            }
+
+            saveCart(cart);
+            closeModal();
+        });
+
+        modal.style.display = 'block';
     });
+});
+
+
 </script>

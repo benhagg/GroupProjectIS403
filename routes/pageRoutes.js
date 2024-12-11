@@ -6,9 +6,9 @@ const knex = require("knex")({
     connection: {
         host: process.env.RDS_HOSTNAME || "localhost",
         user: process.env.RDS_USERNAME || "postgres",
-        password: process.env.RDS_PASSWORD || "admin",
-        database: process.env.RDS_DB_NAME || "graneBakery",
-        port: process.env.RDS_PORT || 5432,
+        password: process.env.RDS_PASSWORD || "Smores7531",
+        database: process.env.RDS_DB_NAME || "bakery",
+        port: process.env.RDS_PORT || 5434,
     },
 });
 
@@ -165,5 +165,51 @@ router.post("/createOrder", (req, res) => {
     console.log("order created")
     res.redirect("/shop");
 })
+
+router.get("/cart", (req, res) => {
+    res.render("pages/cart", {
+        
+    });
+});
+
+
+
+
+router.post('/checkout', async (req, res) => {
+    if (!req.session.username) {
+        return res.status(401).send({ status: 'error', message: 'User not logged in' });
+    }
+
+    const username = req.session.username;
+    const { cartItems } = req.body;
+
+    try {
+        await knex.transaction(async trx => {
+            const orderResult = await trx('orders').insert({
+                username: username,
+                order_date: new Date()
+            }).returning('order_id');
+
+            const orderId = orderResult[0];
+
+            for (const item of cartItems) {
+                await trx('order_items').insert({
+                    order_id: orderId,
+                    product_id: item.productId,
+                    quantity: item.quantity
+                });
+            }
+        });
+
+        res.send({ status: 'success', message: 'Order placed successfully.' });
+    } catch (error) {
+        console.error('Transaction Error:', error);
+        res.status(500).send({ status: 'error', message: 'Error processing order' });
+    }
+});
+
+  
+  
+
 
 module.exports = router;
