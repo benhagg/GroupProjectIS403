@@ -128,6 +128,10 @@ h4 {
     <% } %>
 </div>
 
+<form action="/cart" method="GET">
+    <button type = "submit" id="goToCartBtn" class="btn" style="display: none;">Go to Cart</button>
+</form>
+
 <!-- Modal Structure -->
 <div id="quantityModal" class="modal">
     <span class="modal-close-btn">&times;</span> <!-- Close button with '×' symbol -->
@@ -142,70 +146,70 @@ h4 {
             <input type="hidden" name="itemId" id="itemIdInput">
             <button type="submit" id="addToCartBtn" class="btn">Add to Cart</button>
         </form>
+
+        <!-- Somewhere inside or outside the 'shop-items' div, based on your layout preference -->
+
         
 </div>
 
+
 <script>
-    // Close modal function
     function closeModal() {
         const modal = document.querySelector('#quantityModal');
         modal.style.display = 'none';
         document.body.style.overflow = 'auto';
     }
-
-    // Initialize or retrieve the cart from localStorage
+    
     function getCart() {
         const cart = localStorage.getItem('cart');
         return cart ? JSON.parse(cart) : [];
     }
-
-    // Save the cart to localStorage
+    
     function saveCart(cart) {
         localStorage.setItem('cart', JSON.stringify(cart));
     }
-
-    // Each button is given an event listener
+    
     document.querySelectorAll('.card-button').forEach(button => {
-    button.addEventListener('click', function() {
-        const itemName = this.dataset.name;
-        const itemPrice = parseFloat(this.dataset.price);
-        const itemId = this.dataset.itemid;
-        const modal = document.querySelector('#quantityModal');
-        const quantityInput = modal.querySelector('#quantityInput');
-        const totalPrice = modal.querySelector('#totalPrice');
-
-        quantityInput.value = 1; // Default quantity
-        totalPrice.textContent = itemPrice.toFixed(2); // Default total price based on quantity
-
-        quantityInput.addEventListener('input', function() {
-            const quantity = parseInt(this.value);
-            totalPrice.textContent = (itemPrice * quantity).toFixed(2);
+        button.addEventListener('click', function() {
+            const modal = document.querySelector('#quantityModal');
+            modal.style.display = 'block';
+    
+            const itemName = this.dataset.name;
+            const itemPrice = parseFloat(this.dataset.price);
+            const itemId = this.dataset.itemid;
+            const quantityInput = modal.querySelector('#quantityInput');
+            const totalPrice = modal.querySelector('#totalPrice');
+    
+            quantityInput.value = 1;
+            totalPrice.textContent = itemPrice.toFixed(2);
+    
+            quantityInput.addEventListener('input', function() {
+                const quantity = parseInt(this.value);
+                totalPrice.textContent = (itemPrice * quantity).toFixed(2);
+            });
+    
+            document.querySelector('#addToCartBtn').addEventListener('click', function(event) {
+                event.preventDefault();
+                const quantity = parseInt(quantityInput.value);
+                const cart = getCart();
+                const existingItem = cart.find(item => item.id === itemId);
+    
+                if (existingItem) {
+                    existingItem.quantity += quantity;
+                } else {
+                    cart.push({
+                        id: itemId,
+                        name: itemName,
+                        price: itemPrice,
+                        quantity: quantity
+                    });
+                }
+    
+                saveCart(cart);
+                closeModal();
+                document.getElementById('goToCartBtn').style.display = 'block';  // Ensure this is the only place it turns display to block
+            });
         });
-
-        document.querySelector('#addToCartBtn').addEventListener('click', function(event) {
-            event.preventDefault();
-            const quantity = parseInt(quantityInput.value);
-            const cart = getCart();
-            const existingItem = cart.find(item => item.id === itemId);
-
-            if (existingItem) {
-                existingItem.quantity += quantity;
-            } else {
-                cart.push({
-                    id: itemId,
-                    name: itemName,
-                    price: itemPrice,
-                    quantity: quantity
-                });
-            }
-
-            saveCart(cart);
-            closeModal();
-        });
-
-        modal.style.display = 'block';
     });
-});
-
-
-</script>
+    </script>
+    

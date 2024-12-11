@@ -123,6 +123,7 @@
           document.getElementById('checkout-btn').addEventListener('click', function(event) {
     event.preventDefault(); // Prevent the default form submission
     const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    console.log('cart')
     const username = sessionStorage.getItem('username');
     
     fetch('/checkout', {
@@ -139,8 +140,9 @@
     .then(data => {
         if (data.status === 'success') {
             console.log('Order processed successfully');
+            alert('Order processed successfully');
             localStorage.removeItem('cart');
-            window.location.href = '/order-success'; // Redirect to a success page
+            window.location.href = '/shop'; // Redirect to a success page
         } else {
             console.error('Order processing failed:', data.message);
         }

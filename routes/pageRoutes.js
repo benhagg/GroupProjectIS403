@@ -176,11 +176,11 @@ router.get("/cart", (req, res) => {
 
 
 router.post('/checkout', async (req, res) => {
-    if (!req.session.username) {
+    if (!req.session.user.username) {
         return res.status(401).send({ status: 'error', message: 'User not logged in' });
     }
 
-    const username = req.session.username;
+    const username = req.session.user.username;
     const { cartItems } = req.body;
 
     try {
@@ -190,7 +190,10 @@ router.post('/checkout', async (req, res) => {
                 order_date: new Date()
             }).returning('order_id');
 
-            const orderId = orderResult[0];
+            const orderId = orderResult[0].order_id;
+            console.log("Order ID:", typeof orderId, orderId);
+           
+
 
             for (const item of cartItems) {
                 await trx('order_items').insert({
