@@ -6,25 +6,107 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dane's Bakery Login</title>
+    <style>
+        /* General body styling */
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f1e5; /* Warm bakery-like background color */
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+        }
+
+        /* Form container styling */
+        form {
+            border-radius: 10px;
+            background-color: white;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px; /* Limit form width for better readability */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        /* Form heading */
+        form h1 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #333; /* Slightly muted black for text */
+        }
+
+        /* Input fields */
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #f4a261; /* Focused border color */
+            outline: none;
+            box-shadow: 0 0 5px rgba(244, 162, 97, 0.5);
+        }
+
+        /* Submit button */
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            color: white;
+            background-color: #f4a261; /* Bakery-themed orange */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #e76f51; /* Darker shade for hover effect */
+        }
+
+        /* Additional styling for links or text */
+        .forgot-password {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .forgot-password a {
+            color: #f4a261;
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
+<body>
+    <form>
+        <h1>Welcome to Dane's Bakery</h1>
+        <br>
+        <input type="text" placeholder="Enter your username" required>
+        <input type="password" placeholder="Enter your password" required>
+        <button type="submit">Login</button>
+        <div class="forgot-password">
+            <a href="#">Forgot your password?</a>
+        </div>
+        <br>
+        <div class="forgot-password">
+            <a href="/" class="button">Return Home</a>
+        </div>
+    </form>
+</body>
 
-<style>
-    body {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background-color: #F2F2F2;
-    }
-
-    form {
-        border-radius: 10px;
-        background-color: white;
-        padding: 40px;
-        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    }
-</style>
 
 <script>
     document.getElementById('loginForm').addEventListener('keydown', function (event) {
@@ -34,25 +116,4 @@
         }
     });
 </script>
-
-<body>
-    <form id="loginForm" action="/login" method="post">
-        <input type="hidden" id="originalUrl" name="originalUrl" value="<%= originalUrl || '/' %>">
-        <label>Welcome to Dane's Bakery</label>
-        <br><br>
-        <label for="username">Username:</label>
-        <br><br>
-        <input type="text" id="username" name="username" required>
-        <br><br>
-        <label for="password">Password:</label>
-        <br><br>
-        <input type="password" id="password" name="password" required>
-        <br><br>
-        <button type="submit">Login</button>
-        <br><br>
-        <a href="/" class="button">Home</a>
-    </form>
-
-</body>
-
 </html>
