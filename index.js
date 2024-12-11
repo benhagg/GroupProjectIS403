@@ -27,6 +27,14 @@ app.use((req, res, next) => {
     next();
 });
 
+// Add this middleware to make session data available globally
+app.use((req, res, next) => {
+    // Attach session data to res.locals for global access in views
+    res.locals.authenticated = req.session.authenticated || false;
+    res.locals.user = req.session.user || null;
+    next();
+});
+
 app.get("/login", (req, res) => {
     res.render("pages/login", {
         originalUrl: req.session.originalUrl || '/'
