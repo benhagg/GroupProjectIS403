@@ -6,9 +6,9 @@ const knex = require("knex")({
     connection: {
         host: process.env.RDS_HOSTNAME || "localhost",
         user: process.env.RDS_USERNAME || "postgres",
-        password: process.env.RDS_PASSWORD || "Smores7531",
-        database: process.env.RDS_DB_NAME || "bakery",
-        port: process.env.RDS_PORT || 5434,
+        password: process.env.RDS_PASSWORD || "admin",
+        database: process.env.RDS_DB_NAME || "graneBakery",
+        port: process.env.RDS_PORT || 5432,
     },
 });
 
@@ -116,7 +116,7 @@ router.post("/logout", (req, res) => {
     });
 });
 
-router.get("/orders", (req, res) => {
+router.get("/orders", checkAuthenticated, (req, res) => {
     knex("orders as o")
         .join("order_items as oi", "o.order_id", "oi.order_id")
         .join("products as p", "oi.product_id", "p.product_id")
@@ -163,20 +163,20 @@ router.post("/updateOrderStatus", (req, res) => {
 
 // this route is for test and debugging. if we dont figure out how to do the cart this could be used
 // to create an order for every item submitted.
-router.post("/createOrder", (req, res) => {
+router.post("/createOrder", checkAuthenticated, (req, res) => {
     console.log(req.body);
     console.log("order created")
     res.redirect("/shop");
 })
 
-router.get("/cart", (req, res) => {
+router.get("/cart", checkAuthenticated, (req, res) => {
     res.render("layout", {
         title: "Cart",
         page: "cart",
     });
 });
 
-router.post('/checkout', async (req, res) => {
+router.post('/checkout', checkAuthenticated, async (req, res) => {
     if (!req.session.user.username) {
         return res.status(401).send({ status: 'error', message: 'User not logged in' });
     }
