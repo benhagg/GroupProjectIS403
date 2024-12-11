@@ -26,17 +26,11 @@ function checkAuthenticated(req, res, next) {
 
 // Define routes for each page
 router.get("/", (req, res) => {
-    knex("products")
-        .select()
-        .then((products) => {
-            // Render the layout with home page content in the body
-            res.render("layout", {
-                title: "Home",
-                page: "home",// Dynamically include the home page
-                products: products, //Pass in the product table to display products
-            });
-        })
-});
+    res.render("layout", {
+        title: "Home",
+        page: "home",// Dynamically include the home page
+    });
+})
 
 router.get("/contact", (req, res) => {
     // Render the layout with contact page content in the body
@@ -104,6 +98,15 @@ router.post("/login", async (req, res) => {
         });
 });
 
+// mimics the post request but with a get request (so i can use an <a> tag in the navbar)
+router.get("/logout", (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.redirect("/account");
+        }
+        res.redirect("/login");
+    });
+});
 router.post("/logout", (req, res) => {
     req.session.destroy(err => {
         if (err) {
