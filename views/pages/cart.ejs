@@ -122,7 +122,12 @@
         },
         body: JSON.stringify({
             username: username,
-            cartItems: cartItems
+            cartItems: cartItems.map (item => ({
+            productId: parseInt(item.id), // Ensure this matches your database field
+                quantity: item.quantity
+            }))
+
+                
         }),
     })
     .then(response => response.json())
