@@ -61,8 +61,9 @@
     <div class="orders-container">
         <% orders.forEach(order=> { %>
             <div class="order-card">
-                <h2>Order ID: <%= order.order_id %>
+                <h2 style="color: <%= order.status === true ? 'green' : 'black' %>;">Order ID: <%= order.order_id %>
                 </h2>
+                <p>Status: <%= order.status === true ? 'Completed' : 'Pending' %></p>
                 <p>Order Date: <%= new Date(order.order_date).toLocaleDateString() %>
                 </p>
                 <p>Customer Username: <%= order.username %>
@@ -72,7 +73,7 @@
                     <div class="allOrdersContainer">
                         <% order.products.forEach(product=> { %>
                             <div class="singleOrderContainer">
-                                <img class="productImage" src="<%= product.image_url %>" alt="<%= product.name %>">
+                                <img class="productImage"  src="<%= product.image_url %>" alt="<%= product.name %>">
                                 <h4>
                                     <%= product.name %>
                                 </h4>
@@ -90,44 +91,21 @@
                 </div>
                 <div style="display: flex; flex-direction: row; gap: 10px;">
                     <div class="order-status">
-                        <input type="checkbox" id="order-<%= order.order_id %>"
-                            onchange="updateOrderStatus(<%= order.order_id %>, true)">
-                        <label for="order-<%= order.order_id %>">Complete</label>
+                        <form action="/editOrder" method="Post">
+                            <input name="orderId" value=<%= order.order_id %> hidden>
+                            <button type = "submit" id="editOrderBtn" class="btn" >Mark as complete</button>
+                        </form>
                     </div>
                     <div class="order-status">
-                        <input type="checkbox" id="delete-order-<%= order.order_id %>"
-                            onchange="updateOrderStatus(<%= order.order_id %>, false)">
-                        <label for="delete-order-<%= order.order_id %>">Delete</label>
+                        <form action="/deleteOrder" method="Post">
+                            <input name="orderId" value=<%= order.order_id %> hidden>
+                            <button type = "submit" id="goToCartBtn" class="btn" >Delete</button>
+                        </form>
                     </div>
                 </div>
             </div>
             <% }) %>
     </div>
-
-    <script>
-        function toggleOrderStatus(orderId) {
-            const checkbox = document.getElementById(`order-${orderId}`);
-            checkbox.checked = !checkbox.checked;
-            updateOrderStatus(orderId, checkbox.checked);
-        }
-
-        function updateOrderStatus(orderId, status) {
-            fetch('/updateOrderStatus', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ orderId: orderId, status: status })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-        }
-    </script>
 </body>
 
 </html>

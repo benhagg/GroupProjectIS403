@@ -6,7 +6,7 @@ const knex = require("knex")({
     connection: {
         host: process.env.RDS_HOSTNAME || "localhost",
         user: process.env.RDS_USERNAME || "postgres",
-        password: process.env.RDS_PASSWORD || "admin",
+        password: process.env.RDS_PASSWORD || "Drj.soccer7",
         database: process.env.RDS_DB_NAME || "graneBakery",
         port: process.env.RDS_PORT || 5432,
     },
@@ -22,6 +22,13 @@ function checkAuthenticated(req, res, next) {
     }
     req.session.originalUrl = req.originalUrl;
     res.redirect("/login");
+}
+function checkAdmin(req, res, next) {
+    if (req.session.user.username === 'cbread') {
+        return next();
+    }
+    req.session.originalUrl = req.originalUrl;
+    res.redirect("/");
 }
 
 // Define routes for each page
@@ -116,7 +123,7 @@ router.post("/logout", (req, res) => {
     });
 });
 
-router.get("/orders", checkAuthenticated, (req, res) => {
+router.get("/orders", checkAuthenticated, checkAdmin, (req, res) => {
     knex("orders as o")
         .join("order_items as oi", "o.order_id", "oi.order_id")
         .join("products as p", "oi.product_id", "p.product_id")
@@ -135,8 +142,8 @@ router.get("/orders", checkAuthenticated, (req, res) => {
                 )) as products
             `)
         )
-        .where("o.status", null)
         .groupBy("o.order_id")
+        .orderByRaw("o.status DESC, o.order_id")
         .then((orders) => {
             res.render("layout", {
                 title: "Orders",
@@ -150,11 +157,28 @@ router.get("/orders", checkAuthenticated, (req, res) => {
         });
 });
 
-router.post("/updateOrderStatus", (req, res) => {
-    const { orderId, status } = req.body;
+router.post("/editOrder", (req, res) => {
+    const { orderId } = req.body;
     knex("orders")
         .where({ order_id: orderId })
-        .update({ status: status })
+        .update({ status: true })
+        .then(()=>{
+            res.redirect('/orders')
+        })
+        .catch((error) => {
+            console.error(`\x1b[31m${error}\x1b[0m`);
+            res.status(500).json({ success: false, message: "Error updating order status" });
+        });
+});
+router.post("/deleteOrder", (req, res) => {
+    const { orderId } = req.body;
+    console.log("orderid: " + orderId)
+    knex("orders")
+        .where({ order_id: orderId })
+        .del()
+        .then(()=>{
+            res.redirect('/orders')
+        })
         .catch((error) => {
             console.error(`\x1b[31m${error}\x1b[0m`);
             res.status(500).json({ success: false, message: "Error updating order status" });
@@ -188,7 +212,8 @@ router.post('/checkout', checkAuthenticated, async (req, res) => {
         await knex.transaction(async trx => {
             const orderResult = await trx('orders').insert({
                 username: username,
-                order_date: new Date()
+                order_date: new Date(),
+                status: false
             }).returning('order_id');
 
             const orderId = orderResult[0].order_id;
