@@ -143,7 +143,7 @@ router.get("/orders", checkAuthenticated, checkAdmin, (req, res) => {
             `)
         )
         .groupBy("o.order_id")
-        .orderByRaw("o.status DESC, o.order_id")
+        .orderByRaw("o.status, o.order_id")
         .then((orders) => {
             res.render("layout", {
                 title: "Orders",
