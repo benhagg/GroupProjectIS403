@@ -54,10 +54,8 @@ router.post("/contact", (req, res) => {
         message,
     } = req.body;
     knex("contacts")
-        .insert({
-            name: name || '',
-            email: email || '',
-            message: message || '',
+        .then(() => {
+            res.redirect("/");
         })
 });
 
