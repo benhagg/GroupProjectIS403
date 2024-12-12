@@ -9,6 +9,7 @@ const knex = require("knex")({
         password: process.env.RDS_PASSWORD || "Drj.soccer7",
         database: process.env.RDS_DB_NAME || "graneBakery",
         port: process.env.RDS_PORT || 5432,
+        ssl: process.env.RDS_SSL ? { rejectUnauthorized: false } : false,
     },
 });
 
